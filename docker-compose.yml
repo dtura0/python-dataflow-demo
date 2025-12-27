@@ -3,7 +3,7 @@ version: "3.9"
 services:
   postgres:
     image: postgres:15
-    container_name: portalhero_postgres
+    container_name: demo_project
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password

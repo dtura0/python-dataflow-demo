@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "portal_hero"
+name = "python-dataflow-demo"
 version = "0.1.0"
 dependencies = ["pandas", "SQLAlchemy", "psycopg2-binary"]
 
