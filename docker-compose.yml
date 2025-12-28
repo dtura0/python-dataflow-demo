@@ -11,5 +11,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  postgres_test:
+    image: postgres:15
+    container_name: project_postgres_test
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5433:5432"
+
 volumes:
   postgres_data:
