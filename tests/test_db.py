@@ -11,7 +11,7 @@ def test_sync_products_inserts_new_products(connection, products_table):
     df = pd.DataFrame(
         {
             "product_id": [1],
-            "name": ["A"],
+            "title": ["A"],
             "price": [11.0],
             "store_id": [[2, 4]],
         }
@@ -22,7 +22,7 @@ def test_sync_products_inserts_new_products(connection, products_table):
 
     # THEN
     result = connection.execute(
-        text("SELECT product_id, name, price, store_id FROM products")
+        text("SELECT product_id, title, price, store_id FROM products")
     ).fetchall()
 
     assert result == [(1, "A", Decimal("11.0"), [2, 4])]
@@ -33,8 +33,8 @@ def test_update_product(connection):
     connection.execute(
         text(
             """
-            INSERT INTO products (product_id, name, price, store_id)
-            VALUES (1, 'Old name', 10.0, ARRAY[1])
+            INSERT INTO products (product_id, title, price, store_id)
+            VALUES (1, 'Old title', 10.0, ARRAY[1])
             """
         )
     )
@@ -42,7 +42,7 @@ def test_update_product(connection):
     new_df = pd.DataFrame(
         {
             "product_id": [1],
-            "name": ["New name"],
+            "title": ["New title"],
             "price": [9.99],
             "store_id": [[1, 2]],
         }
@@ -54,11 +54,11 @@ def test_update_product(connection):
     # THEN
     result = connection.execute(
         text(
-            "SELECT name, price, store_id FROM products WHERE product_id = 1"  # NOQA: E501
+            "SELECT title, price, store_id FROM products WHERE product_id = 1"  # NOQA: E501
         )
     ).one()
 
-    assert result == ("New name", Decimal("9.99"), [1, 2])
+    assert result == ("New title", Decimal("9.99"), [1, 2])
 
 
 def test_sync_products_deletes_missing_products(connection):
@@ -66,7 +66,7 @@ def test_sync_products_deletes_missing_products(connection):
     connection.execute(
         text(
             """
-            INSERT INTO products (product_id, name, price, store_id)
+            INSERT INTO products (product_id, title, price, store_id)
             VALUES (1, 'A', 9.99, ARRAY[1])
             """
         )
@@ -74,7 +74,7 @@ def test_sync_products_deletes_missing_products(connection):
 
     # AND: empty staging
     empty_df = pd.DataFrame(
-        columns=["product_id", "name", "price", "store_id"]
+        columns=["product_id", "title", "price", "store_id"]
     )
 
     # WHEN
@@ -91,7 +91,7 @@ def test_logs_updated_product(connection, caplog):
     connection.execute(
         text(
             """
-            INSERT INTO products (product_id, name, price, store_id)
+            INSERT INTO products (product_id, title, price, store_id)
             VALUES (1, 'Old', 10.0, ARRAY[1])
             """
         )
@@ -101,7 +101,7 @@ def test_logs_updated_product(connection, caplog):
     df = pd.DataFrame(
         {
             "product_id": [1],
-            "name": ["New"],
+            "title": ["New"],
             "price": [20.0],
             "store_id": [[2]],
         }
@@ -119,7 +119,7 @@ def test_products_staging_is_dropped_after_commit(engine):
     df = pd.DataFrame(
         {
             "product_id": [1],
-            "name": ["A"],
+            "title": ["A"],
             "price": [10.0],
             "store_id": [[1]],
         }

@@ -1,6 +1,7 @@
 import logging
 import os
 
+from project.config import DATA_DIR, CSV_FILES
 from project.db import get_engine, sync_products
 from project.ingest import load_csv
 from project.logging_config import setup_logging
@@ -15,18 +16,24 @@ def main():
     db_url = os.environ["DATABASE_URL"]
     engine = get_engine(db_url)
 
-    for csv in ("feed_items", "portal_items"):
-        with engine.begin() as conn:
-            logger.info("Processing file %s", csv)
+    for filename in CSV_FILES:
+        csv_path = DATA_DIR / filename
 
-            df = load_csv("data.csv")
-            validated_df = validate_data(df)
+        logger.info("Processing file %s (%s)", filename, csv_path)
+
+        if not csv_path.exists():
+            raise FileNotFoundError(f"CSV not found: {csv_path}")
+
+        with engine.begin() as conn:
+            df = load_csv(csv_path)
+
+            validated_df = validate_data(df, filename)
             if validated_df.empty:
-                raise ValueError("No valid rows to process for %s", csv)
+                raise ValueError(f"No valid rows to process for {filename}")
 
             sync_products(conn, validated_df)
 
-            logger.info("Finished processing file %s", csv)
+        logger.info("Finished processing file %s", filename)
 
 
 if __name__ == "__main__":

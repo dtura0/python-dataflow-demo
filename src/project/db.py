@@ -16,7 +16,7 @@ def write_staging(conn, df):
             """
             CREATE TEMP TABLE IF NOT EXISTS products_staging (
                 product_id INT,
-                name TEXT,
+                title TEXT,
                 price NUMERIC,
                 store_id INT[]
             ) ON COMMIT DROP
@@ -39,16 +39,16 @@ def upsert_products(conn):
         result = conn.execute(
             text(
                 """
-                INSERT INTO products (product_id, name, price, store_id)
+                INSERT INTO products (product_id, title, price, store_id)
                 SELECT
                     s.product_id::INT,
-                    s.name,
+                    s.title,
                     s.price::NUMERIC,
                     s.store_id::INT[]
                 FROM products_staging s
                 ON CONFLICT (product_id) DO UPDATE
                 SET
-                    name = EXCLUDED.name,
+                    title = EXCLUDED.title,
                     price = EXCLUDED.price,
                     store_id = EXCLUDED.store_id
                 RETURNING

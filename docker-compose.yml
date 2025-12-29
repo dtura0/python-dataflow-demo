@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15
-    container_name: demo_project
+    container_name: project_postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password

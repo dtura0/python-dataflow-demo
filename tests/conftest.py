@@ -32,7 +32,7 @@ def products_table(engine):
                 """
                 CREATE TABLE products (
                     product_id INT PRIMARY KEY,
-                    name TEXT,
+                    title TEXT,
                     price NUMERIC,
                     store_id INT[]
                 )

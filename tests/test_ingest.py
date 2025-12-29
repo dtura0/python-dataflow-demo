@@ -10,7 +10,7 @@ def test_load_csv_valid_file(tmp_path, monkeypatch):
 
     csv_file = data_dir / "test.csv"
     csv_file.write_text(
-        "product_id,name,price,store_id\n" "1,A,9.99,2|4\n" "2,B,19.99,3\n",
+        "product_id,title,price,store_id\n" "1,A,9.99,2|4\n" "2,B,19.99,3\n",
         encoding="utf-8",
     )
 
@@ -20,7 +20,7 @@ def test_load_csv_valid_file(tmp_path, monkeypatch):
 
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
-    assert list(df.columns) == ["product_id", "name", "price", "store_id"]
+    assert list(df.columns) == ["product_id", "title", "price", "store_id"]
     assert df.iloc[0]["product_id"] == "1"
 
 

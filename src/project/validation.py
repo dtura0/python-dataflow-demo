@@ -4,10 +4,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-COLUMNS = ("product_id", "name", "price", "store_id")
+COLUMNS = ("product_id", "title", "price", "store_id")
 
 
-def validate_products(df, csv):
+def validate_data(df, csv):
     missing = set(COLUMNS) - set(df.columns)
     if missing:
         raise KeyError(f"Missing columns: {missing}")
@@ -22,8 +22,8 @@ def validate_products(df, csv):
         if pd.isna(product_id):
             errors.append("product_id is invalid")
 
-        if pd.isna(product["name"]):
-            errors.append("name is null")
+        if pd.isna(product["title"]):
+            errors.append("title is null")
 
         price = pd.to_numeric(product["price"], errors="coerce")
         if pd.isna(price) or price < 0:
@@ -62,7 +62,7 @@ def validate_products(df, csv):
             valid_products.append(
                 {
                     "product_id": int(product_id),
-                    "name": str(product["name"]),
+                    "title": str(product["title"]),
                     "price": float(price),
                     "store_id": list(valid_store_ids),
                 }
