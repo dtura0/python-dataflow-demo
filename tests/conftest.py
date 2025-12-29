@@ -12,6 +12,18 @@ def engine():
 
 
 @pytest.fixture
+def connection(engine, products_table):
+    connection = engine.connect()
+    transaction = connection.begin()
+
+    try:
+        yield connection
+    finally:
+        transaction.rollback()
+        connection.close()
+
+
+@pytest.fixture(scope="session")
 def products_table(engine):
     with engine.begin() as conn:
         conn.execute(text("DROP TABLE IF EXISTS products"))
@@ -28,9 +40,3 @@ def products_table(engine):
             )
         )
     yield
-
-
-@pytest.fixture(autouse=True)
-def clean_tables(engine):
-    with engine.begin() as conn:
-        conn.execute(text("TRUNCATE products, products_staging"))
