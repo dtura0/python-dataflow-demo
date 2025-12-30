@@ -5,19 +5,8 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  db_test:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: test_db
-    ports:
-      - "5433:5432"
 
   db_init:
     build: .
@@ -29,24 +18,27 @@ services:
 
   app:
     build: .
-    container_name: project_app
     depends_on:
       - db
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/db
-    volumes:
-      - .:/app
     command: python -m project.main
+
+  db_test:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5433:5432"
 
   test:
     build: .
-    container_name: project_test
     depends_on:
       - db_test
     environment:
       DATABASE_URL: postgresql://user:password@db_test:5433/test_db
-    volumes:
-      - .:/app
     command: pytest -v
 
 volumes:

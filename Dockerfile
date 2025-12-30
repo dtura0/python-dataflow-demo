@@ -18,6 +18,12 @@ RUN pip install --upgrade pip \
 # Copy source code
 COPY src ./src
 
+# Copy raw data
+COPY data ./data
+
+# Copy test suite
+COPY tests ./tests
+
 ENV PYTHONPATH=/app/src
 
 CMD ["python", "-m", "project.main"]
