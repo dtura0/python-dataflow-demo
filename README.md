@@ -17,8 +17,8 @@ make init
 This will:
 
 - build the application Docker image
-- start PostgreSQL containers (app and test databases)
-- prepare the environment for running the app and tests
+- start PostgreSQL container
+- prepare the environment for running the app
 
 ### Run the application
 
@@ -30,6 +30,7 @@ The application will:
 - load CSV files from data/raw
 - validate the data
 - synchronize products into the database
+- persist logs in the designated folder
 
 ## How to run the tests
 

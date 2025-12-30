@@ -22,6 +22,8 @@ services:
       - db
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/db
+    volumes:
+    - ./logs:/app/logs
     command: python -m project.main
 
   db_test:
