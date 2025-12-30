@@ -1,8 +1,6 @@
 import logging
 import pandas as pd
 
-from project.config import DATA_DIR
-
 
 logger = logging.getLogger(__name__)
 

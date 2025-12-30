@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
 
+from project import config
 from project import ingest
 
 
@@ -14,9 +15,9 @@ def test_load_csv_valid_file(tmp_path, monkeypatch):
         encoding="utf-8",
     )
 
-    monkeypatch.setattr(ingest, "DATA_DIR", data_dir)
+    monkeypatch.setattr(config, "DATA_DIR", data_dir)
 
-    df = ingest.load_csv("test.csv")
+    df = ingest.load_csv(csv_file)
 
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2
@@ -28,9 +29,9 @@ def test_load_csv_file_not_found(tmp_path, monkeypatch):
     data_dir = tmp_path / "data" / "raw"
     data_dir.mkdir(parents=True)
 
-    monkeypatch.setattr(ingest, "DATA_DIR", data_dir)
+    monkeypatch.setattr(config, "DATA_DIR", data_dir)
 
     with pytest.raises(FileNotFoundError) as exc:
-        ingest.load_csv("missing.csv")
+        ingest.load_csv(data_dir / "missing.csv")
 
     assert "CSV file not found" in str(exc.value)
