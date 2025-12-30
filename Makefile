@@ -14,10 +14,12 @@ venv:
 install-deps:
 	. $(VENV)/bin/activate && \
 	$(PIP) install --upgrade pip && \
-	$(PIP) install -e ".[dev]"
+	$(PIP) install -e ".[dev]" && \
+	sleep 5
 
 db-start:
-	docker compose up -d
+	. $(VENV)/bin/activate && \
+	docker compose up -d && \
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m project.db_init
 
 init: venv install-deps db-start
