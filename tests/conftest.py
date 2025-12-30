@@ -1,12 +1,13 @@
 import pytest
 from sqlalchemy import create_engine, text
 
-TEST_DB_URL = "postgresql://user:password@localhost:5433/test_db"
+
+DATABASE_URL = "postgresql://user:password@db_test:5432/test_db"
 
 
 @pytest.fixture(scope="session")
 def engine():
-    engine = create_engine(TEST_DB_URL)
+    engine = create_engine(DATABASE_URL)
     yield engine
     engine.dispose()
 

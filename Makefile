@@ -1,35 +1,15 @@
-VENV := .venv
-PYTHON := $(if $(wildcard $(VENV)/bin/python),$(VENV)/bin/python,python3)
-PYTHONPATH := src
-PIP := $(VENV)/bin/pip
+.PHONY: init run test down
 
-export DB_URL=postgresql://user:password@localhost:5432/db
-export TEST_DB_URL=postgresql://user:password@localhost:5433/test_db
-
-.PHONY: init run test db-start db-stop venv
-
-venv:
-	$(PYTHON) -m venv $(VENV)
-
-install-deps:
-	. $(VENV)/bin/activate && \
-	$(PIP) install --upgrade pip && \
-	$(PIP) install -e ".[dev]" && \
-	sleep 5
-
-db-start:
-	. $(VENV)/bin/activate && \
-	docker compose up -d && \
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m project.db_init
-
-init: venv install-deps db-start
-	@echo "✔ Environment ready"
+init:
+	docker compose up -d db
+	docker compose build
+	docker compose run --rm db_init
 
 run:
-	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m project.main
+	docker compose run --rm app
 
 test:
-	$(PYTHON) -m pytest -v
+	docker compose run --rm test
 
-db-stop:
-	docker compose down
+clean:
+	docker compose down -v

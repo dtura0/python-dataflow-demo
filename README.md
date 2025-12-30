@@ -6,13 +6,6 @@ The goal is to demonstrate a **clean, testable and reproducible workflow**, incl
 
 ---
 
-### Prerequisites (WSL / Linux)
-
-```bash
-sudo apt update
-sudo apt install -y python3 python3-venv python3-pip
-```
-
 ## How to run the project
 
 ### Initialize the environment
@@ -22,9 +15,10 @@ make init
 ```
 
 This will:
-- create a Python virtual environment
-- install dependencies from pyproject.toml
-- start PostgreSQL using Docker
+
+- build the application Docker image
+- start PostgreSQL containers (app and test databases)
+- prepare the environment for running the app and tests
 
 ### Run the application
 
@@ -86,11 +80,14 @@ This ensures the database always reflects the latest CSV state.
 
 ## Technical decisions
 
-### Dockerized databases
-PostgreSQL runs in Docker containers to guarantee:
-- consistent behavior across environments
-- easy setup
-- clean separation between app and test databases
+### Dockerized environment
+The entire application stack is fully containerized using Docker and Docker Compose.
+
+This ensures:
+- identical behavior across environments (no “works on my machine” issues)
+- zero local setup beyond Docker itself
+- clear isolation between application runtime and test execution
+- reproducible database state for both development and testing
 
 ### Code formatting with Black
 Black enforces a consistent code style automatically, removing formatting concerns from development.

@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine, text
 
-from project.config import DB_URL
+from project.config import DATABASE_URL
 
 
 def main():
-    engine = create_engine(DB_URL)
+    engine = create_engine(DATABASE_URL)
 
     with engine.begin() as conn:
         conn.execute(

@@ -1,6 +1,6 @@
 import logging
 
-from project.config import DB_URL, DATA_DIR, CSV_FILES
+from project.config import DATABASE_URL, DATA_DIR, CSV_FILES
 from project.db import get_engine, sync_products
 from project.ingest import load_csv
 from project.logging_config import setup_logging
@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     setup_logging()
-    db_url = DB_URL
-    engine = get_engine(db_url)
+    engine = get_engine(DATABASE_URL)
 
     for filename in CSV_FILES:
         csv_path = DATA_DIR / filename
