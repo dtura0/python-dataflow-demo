@@ -8,18 +8,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  db_init:
-    build: .
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgresql://user:password@db:5432/db
-    command: python -m project.db_init
-
   app:
     build: .
     depends_on:
       - db
+    working_dir: /app
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/db
     volumes:
@@ -34,14 +27,6 @@ services:
       POSTGRES_DB: test_db
     ports:
       - "5433:5432"
-
-  test:
-    build: .
-    depends_on:
-      - db_test
-    environment:
-      DATABASE_URL: postgresql://user:password@db_test:5433/test_db
-    command: pytest -v
 
 volumes:
   postgres_data:
